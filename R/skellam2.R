@@ -1,14 +1,3 @@
-# Libary needed:
-library(skellam)
-library(tidyverse)
-
-# Skellam2 density function:
-dskellam2 <- function(x, m, s, Ind = TRUE) {
-  lam1 <- 0.5 * (m + s)
-  lam2 <- s - lam1
-  dskellam(x, lam1, lam2, log = Ind)
-}
-
 #Skellam2 loglikelihood with covariates
 skellam2_ll <- function(theta, y, X) {
 
@@ -36,7 +25,7 @@ fit_skellam2 <- function(z_df){
 
   # starting values
   initial_beta <- coef(lm(Z ~ Home + Away, data = z_df)) + rnorm(1, 0, 0.1)
-  initial_theta <- c(initial_beta, s = 4)
+  initial_theta <- c(initial_beta, s = 5)
 
   model <- optim(
     initial_theta, skellam2_ll,
@@ -53,10 +42,13 @@ fit_skellam2 <- function(z_df){
 
 summarize_skellam2 <- function(model, z_df){
 
+  teams = levels(z_df$Home)
+  nteams = length(teams)
+
   alpha_hat <- model$model$par[1]
-  beta_hat <- model$model$par[2:20]
-  gamma_hat <- model$model$par[21:39]
-  sigma2_hat <- model$model$par[40]
+  beta_hat <- model$model$par[2:nteams]
+  gamma_hat <- model$model$par[(nteams + 1):(2*nteams - 1)]
+  sigma2_hat <- model$model$par[(2*nteams)]
 
   skellam2_model_results <- list(
     alpha_hat = alpha_hat,
@@ -74,9 +66,10 @@ summarize_skellam2 <- function(model, z_df){
     value = model$model$value
   )
 
-  rownames(skellam2_model_results$team_abillities) = levels(z_df$Home)[-1]
-  skellam2_model_results$team_abillities = round(skellam2_model_results$team_abillities, 3)
+  rownames(skellam2_model_results$team_abillities) = teams[-1]
+    skellam2_model_results$team_abillities = round(
+      skellam2_model_results$team_abillities, 3
+  )
 
   return(skellam2_model_results)
-
 }

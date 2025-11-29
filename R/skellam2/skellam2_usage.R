@@ -6,17 +6,15 @@ overview_path <- file.path(data_path, "overview")
 
 skellam2_path <- "C:/Users/lntre/Desktop/results/skellam2"
 
-raw_leagues <- c("Premier League", "Serie A")
-leagues <- c("pl_", "sa_")
+raw_leagues <- c("Premier League", "Serie A", "La Liga", "Bundesliga", "Ligue 1")
+leagues <- c("pl_", "sa_", "ll_", "bl_", "l1")
 seasons <- c("2020-2021","2021-2022","2022-2023","2023-2024","2024-2025")
 
 std_prfx <- "modelling_df_"
-j = 2 ; i = 1
 
 for (j in seq_along(leagues)){
 
   for (i in seq_along(seasons)){
-
     message("Currently in league : ", raw_leagues[j], " and Season: ", seasons[i])
 
     modelling_file_path <- file.path(
@@ -137,4 +135,4 @@ for (j in seq_along(leagues)){
 
     #obj <- readRDS(file.path(folder_path, rds_name))
   }
-2}
+}

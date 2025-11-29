@@ -1,3 +1,14 @@
+# Libary needed:
+library(skellam)
+library(tidyverse)
+
+# Skellam2 density function:
+dskellam2 <- function(x, m, s, Ind = TRUE) {
+  lam1 <- 0.5 * (m + s)
+  lam2 <- s - lam1
+  dskellam(x, lam1, lam2, log = Ind)
+}
+
 # --- League function --- #
 univariate_league <- function(Z, HG, AG, HT, AT) {
 
@@ -12,7 +23,6 @@ univariate_league <- function(Z, HG, AG, HT, AT) {
 
   list(points=points, pos=pos, GF=GF, GA=GA, GD=GF-GA)
 }
-
 
 # Summary table:
 summarize_simulations <- function(sim_array){
