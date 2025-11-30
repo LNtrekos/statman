@@ -12,7 +12,6 @@ seasons <- c("2020-2021","2021-2022","2022-2023","2023-2024","2024-2025")
 
 std_prfx <- "modelling_df_"
 
-
 for (j in seq_along(leagues)){
 
   for (i in seq_along(seasons)){
@@ -120,7 +119,7 @@ for (j in seq_along(leagues)){
     # Final results (BUG FIXED here: correct variables used)
     final_results <- list(
       Value         = ZIskellam2_model$model$value,
-      special_param = tail(ZIskellam2_model$model$par, 1),
+      special_param = tail(ZIskellam2_model$model$par, 2),
       Est_probs     = colMeans(ZIskellam2_fitted_league[, 4:6]),
       MSE = cbind(Point = points_mse,
                   GF    = gf_mse,

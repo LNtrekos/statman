@@ -15,7 +15,7 @@ std_prfx <- "modelling_df_"
 for (j in seq_along(leagues)){
 
   for (i in seq_along(seasons)){
-
+    j = 4; i = 1
     message("Currently in league : ", raw_leagues[j], " and Season: ", seasons[i])
 
     modelling_file_path <- file.path(
@@ -140,7 +140,7 @@ for (j in seq_along(leagues)){
       file = file.path(folder_path, rds_name)
     )
 
-    #obj <- readRDS(file.path(folder_path, rds_name))
+    obj <- readRDS(file.path(folder_path, rds_name))
   }
 }
 

@@ -27,8 +27,8 @@ fit_Z2skellam2 <- function(z_df){
   )
 
   # starting values
-  initial_beta <- coef(lm(Z ~ Home + Away, data = z_df)) + rnorm(1, 0, 0.1)
-  initial_theta <- c(initial_beta, sigma1 = 5, sigma2 = 5)
+  initial_beta <- coef(lm(Z ~ Home + Away, data = z_df))
+  initial_theta <- c(initial_beta, sigma1 = 4, sigma2 = 4)
 
   model <- optim(
     initial_theta, Z2skellam2_ll,

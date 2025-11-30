@@ -67,8 +67,8 @@ summarize_skellam2 <- function(model, z_df){
   )
 
   rownames(skellam2_model_results$team_abillities) = teams[-1]
-    skellam2_model_results$team_abillities = round(
-      skellam2_model_results$team_abillities, 3
+  skellam2_model_results$team_abillities = round(
+    skellam2_model_results$team_abillities, 3
   )
 
   return(skellam2_model_results)
