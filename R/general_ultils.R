@@ -24,6 +24,26 @@ univariate_league <- function(Z, HG, AG, HT, AT) {
   list(points=points, pos=pos, GF=GF, GA=GA, GD=GF-GA)
 }
 
+bivariate_league <- function(Z, HG1, AG1, HG2, AG2, HT, AT) {
+
+  hp <- 3*(Z > 0) + (Z == 0)
+  ap <- 3*(Z < 0) + (Z == 0)
+
+  points <- tapply(hp, HT, sum) + tapply(ap, AT, sum)
+
+  GF1 <- tapply(HG1, HT, sum) + tapply(AG1, AT, sum)
+  GA1 <- tapply(AG1, HT, sum) + tapply(HG1, AT, sum)
+  GF2 <- tapply(HG2, HT, sum) + tapply(AG2, AT, sum)
+  GA2 <- tapply(AG2, HT, sum) + tapply(HG2, AT, sum)
+
+  GF = GF1 + GF2
+  GA = GA1 + GA2
+
+  pos <- nteams + 1 - rank(points, ties.method="max")
+
+  list(points=points, pos=pos, GF=GF, GA=GA, GD=GF-GA)
+}
+
 # Summary table:
 summarize_simulations <- function(sim_array){
 

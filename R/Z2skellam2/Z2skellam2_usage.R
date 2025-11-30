@@ -4,7 +4,7 @@ data_path <- "C:/Users/lntre/Desktop/thesis_data"
 modelling_df_path <- file.path(data_path, "modelling")
 overview_path <- file.path(data_path, "overview")
 
-skellam2_path <- "C:/Users/lntre/Desktop/results/skellam2"
+Z2skellam2_path <- "C:/Users/lntre/Desktop/results/Z2skellam2"
 
 raw_leagues <- c("Premier League", "Serie A", "La Liga", "Bundesliga", "Ligue 1")
 leagues <- c("pl_", "sa_", "ll_", "bl_", "l1_")
@@ -15,6 +15,7 @@ std_prfx <- "modelling_df_"
 for (j in seq_along(leagues)){
 
   for (i in seq_along(seasons)){
+
     message("Currently in league : ", raw_leagues[j], " and Season: ", seasons[i])
 
     modelling_file_path <- file.path(
@@ -23,27 +24,31 @@ for (j in seq_along(leagues)){
 
     z_df <- read.csv(modelling_file_path) %>%
       mutate(Home = as.factor(Home), Away = as.factor(Away)) %>%
-      select(Home, Away, Z)
+      select(Home, Away, Z1, Z2, Z, H1, A1, H2, A2)
 
     t0 = Sys.time()
     # fitted the non inflated model
-    skellam2_model <- fit_skellam2(z_df = z_df)
+    Z2skellam2_model <- fit_Z2skellam2(z_df)
     fitting_time = Sys.time() - t0
 
     message("Fitting time:", fitting_time)
 
     # Check the results:
-    skellam2_results <- summarize_skellam2(model = skellam2_model, z_df)
+    Z2skellam2_results <- summarize_Z2skellam2(model = Z2skellam2_model, z_df)
 
-    skellam2_fitted_league <- league_probabilities_skellam2(z_df, skellam2_model)
+    Z2skellam2_fitted_league <- league_probabilities_Z2skellam2(
+      z_df, Z2skellam2_model
+    )
 
-    B = 10
+    B = 100
     teams <- levels(z_df$Home)
     nteams <- length(teams)
 
     message("Simulation:")
     t0 = Sys.time()
-    sim_array <- simulate_season_skellam2(B, z_df = z_df, skellam2_model)
+    sim_array <- simulate_season_Z2skellam2(
+      B = B, z_df = z_df, model = Z2skellam2_model
+    )
     sim_time = Sys.time() - t0
     message("Sim time:", sim_time)
 
@@ -53,7 +58,9 @@ for (j in seq_along(leagues)){
     rank_tab <- ranking_probability_table(sim_array)
 
     # Create folder safely
-    folder_path <- file.path(skellam2_path, paste0(leagues[j], seasons[i]))
+    folder_path <- file.path(
+      Z2skellam2_path, paste0(leagues[j], seasons[i])
+    )
     if (!dir.exists(folder_path)) dir.create(folder_path, recursive = TRUE)
 
     # Heatmap
@@ -115,9 +122,9 @@ for (j in seq_along(leagues)){
 
     # Final results (BUG FIXED here: correct variables used)
     final_results <- list(
-      Value         = skellam2_model$model$value,
-      special_param = tail(skellam2_model$model$par, 1),
-      Est_probs     = colMeans(skellam2_fitted_league[, 4:6]),
+      Value         = Z2skellam2_model$model$value,
+      special_param = tail(Z2skellam2_model$model$par, 2),
+      Est_probs     = colMeans(Z2skellam2_fitted_league[, 10:12]),
       MSE = cbind(Point = points_mse,
                   GF    = gf_mse,
                   GA    = ga_mse),
@@ -136,3 +143,4 @@ for (j in seq_along(leagues)){
     #obj <- readRDS(file.path(folder_path, rds_name))
   }
 }
+
