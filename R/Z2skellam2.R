@@ -56,15 +56,15 @@ summarize_Z2skellam2 <- function(z_df = z_df, model){
   results <- list(
 
     parameters = data.frame(
-      mean = c(model$model$par[1], tail(model$model$par, 2)),
-      sd = c(SE[1], tail(SE, 2))
+      mean = c(model$model$par[1], tail(model$model$par, 2))
+      #,sd = c(SE[1], tail(SE, 2))
     ),
 
     team_abillities = data.frame(
       home = model$model$par[2:nteams],
-      home_sd = SE[2:nteams],
-      away = model$model$par[(nteams + 1):(2*nteams - 1)],
-      away_sd = SE[(nteams + 1):(2*nteams - 1)]
+      #home_sd = SE[2:nteams],
+      away = model$model$par[(nteams + 1):(2*nteams - 1)]
+      #,away_sd = SE[(nteams + 1):(2*nteams - 1)]
     ),
 
     value = model$model$value
