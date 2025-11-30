@@ -48,16 +48,25 @@ summarize_Z2skellam2 <- function(z_df = z_df, model){
   teams = levels(z_df$Home)
   nteams = length(teams)
 
-  #model = Z2skellam2_model
-  H <- model$model$hessian
-  Vcov <- solve(H)
-  SE <- sqrt(diag(Vcov))
+  ## --- Safe Hessian inversion with fallback ---
+  SE <- NA   # default if Hessian fails
 
+  SE <- tryCatch({
+    H <- model$model$hessian
+    Vcov <- solve(H)                   # <- may fail
+    sqrt(diag(Vcov))
+  },
+  error = function(e){
+    message("Warning: Hessian inversion failed. Standard errors set to NA.")
+    return(rep(NA, length(model$model$par)))
+  })
+
+  ## --- Build results ---
   results <- list(
 
     parameters = data.frame(
       mean = c(model$model$par[1], tail(model$model$par, 2))
-      #,sd = c(SE[1], tail(SE, 2))
+      # ,sd = c(SE[1], tail(SE, 2))     # uncomment if you want
     ),
 
     team_abillities = data.frame(
@@ -69,7 +78,9 @@ summarize_Z2skellam2 <- function(z_df = z_df, model){
 
     value = model$model$value
   )
+
   rownames(results$team_abillities) <- levels(z_df$Home)[-1]
 
   return(results)
 }
+
