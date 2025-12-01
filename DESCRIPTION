@@ -1,16 +1,25 @@
 Package: statman
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Statistical Modelling Tools for Skellam and Copula Models
 Version: 0.1.0
-Authors@R: c(
+Authors@R: 
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      given = "Leonidas",
+      family = "Ntrekos",
+      email = "l.ntrekos@gmail.com",
       role = c("aut", "cre")
     )
-  )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-License: What license is it under?
+Description: Tools for modelling football data. Includes likelihood
+    estimation, simulation utilities, probability tables, and visualization
+    helpers. Supports both R and C++ backends via Rcpp.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Imports:
+    Rcpp,
+    tidyverse,
+    skellam
+LinkingTo:
+    Rcpp
+
+

@@ -1,1 +1,4 @@
-exportPattern("^[[:alpha:]]+")
+useDynLib(statman, .registration = TRUE)
+importFrom(Rcpp, evalCpp)
+
+export(dmass_skellam2_fcop_cpp)
